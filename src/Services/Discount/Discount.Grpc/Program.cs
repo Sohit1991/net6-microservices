@@ -2,6 +2,7 @@ using AutoMapper;
 using Discount.Grpc.Extensions;
 using Discount.Grpc.Repositories;
 using Discount.Grpc.Services;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,12 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddGrpc();
-var host = Host.CreateDefaultBuilder(args).Build();
-host.MigrateDatabase<Program>();
+
+
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddAutoMapper(typeof(Program));
 
-var app = builder.Build();
+var app = builder.Build(); // Correct way for configuring host in net 6 IHost,WebApplicationBuilder
+app.MigrateDatabase<Program>(); // as builder can build only once //var host = Host.CreateDefaultBuilder(args).Build();
+
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<DiscountService>();
