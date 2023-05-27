@@ -29,7 +29,7 @@ namespace AspnetRunBasics
         {
             string userName = "sohit";
             var basket=await _basketService.GetBasket(userName);
-            var item = basket.Items.SingleOrDefault(a => a.ProductId == productId);
+            var item = basket.Items.FirstOrDefault(a => a.ProductId == productId);
             basket.Items.Remove(item);
             var basketUpdated=await _basketService.UpdateBasket(basket);
             return RedirectToPage();
